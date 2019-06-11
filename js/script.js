@@ -62,8 +62,47 @@ for (let i = 0; i <= 9; i++) {
 playerBoard.addEventListener("click", function(e) {
     // Place ships
     // Call the ships 
+    xCoordPlayer = e.target.id.substring(1,2);
+    yCoordPlayer = e.target.id.substring(2,3);
+    carrierButton.addEventListener("click", function(e) {
+        var p1ShipCarrier = p1Ships[0];
+        rotateButton.addEventListener("click", function(e) {
+            rotateShip(p1ShipCarrier);
+        })
+        p1ShipCarrier.location = placeShip(p1ShipCarrier, xCoordPlayer, yCoordPlayer);
+        var p1ShipCarrierLocation = p1ShipCarrier.location; 
+        console.log(p1ShipCarrierLocation);
+    });
+    battleshipButton.addEventListener("click", function(e) {
+        var p1ShipBattleship = p1Ships[1];
+        rotateButton.addEventListener("click", function(e) {
+            rotateShip(p1ShipBattleship);
+        })
+        p1ShipBattleship.location = placeShip(p1ShipBattleship, xCoordPlayer, yCoordPlayer);
+    });
+    destroyerButton.addEventListener("click", function(e) {
+        var p1ShipDestroyer = p1Ships[2];
+        rotateButton.addEventListener("click", function(e) {
+            rotateShip(p1ShipDestroyer);
+        })
+        p1ShipDestroyer.location = placeShip(p1ShipDestroyer, xCoordPlayer, yCoordPlayer);
+    });
+    submarineButton.addEventListener("click", function(e) {
+        var p1ShipSubmarine = p1Ships[3];
+        rotateButton.addEventListener("click", function(e) {
+            rotateShip(p1ShipSubmarine);
+        })
+        p1ShipSubmarine.location = placeShip(p1ShipSubmarine, xCoordPlayer, yCoordPlayer);
+    });
+    patrolButton.addEventListener("click", function(e) {
+        var p1ShipPatrol = p1Ships[4];
+        rotateButton.addEventListener("click", function(e) {
+            rotateShip(p1ShipPatrol);
+        })
+        p1ShipPatrol.location = placeShip(p1ShipPatrol, xCoordPlayer, yCoordPlayer);
+    });
 
-})
+});
 
 computerBoard.addEventListener("click", function(e) {
     // target a square
@@ -81,30 +120,28 @@ computerBoard.addEventListener("click", function(e) {
 
 })
 
-carrierButton.addEventListener("click", function(e) {
 
-});
 
-battleshipButton.addEventListener("click", function(e) {
+// battleshipButton.addEventListener("click", function(e) {
 
-});
+// });
 
-destroyerButton.addEventListener("click", function(e) {
+// destroyerButton.addEventListener("click", function(e) {
 
-});
+// });
 
-submarineButton.addEventListener("click", function(e) {
+// submarineButton.addEventListener("click", function(e) {
 
-});
+// });
 
-patrolButton.addEventListener("click", function(e) {
+// patrolButton.addEventListener("click", function(e) {
 
-});
+// });
 
-rotateButton.addEventListener("click", function(e) {
-    //Need to hold the ship that you chose and then rotate the ship. 
-    rotateShip(p1Ships[i]);
-});
+// rotateButton.addEventListener("click", function(e) {
+//     //Need to hold the ship that you chose and then rotate the ship. 
+//     rotateShip(p1Ships[i]);
+// });
 
 resetButton.addEventListener("click", function(e) {
     resetGame();
@@ -117,9 +154,27 @@ resetButton.addEventListener("click", function(e) {
     
 // }
 
-function placeShip() {
-
+function placeShip(ship, xCoordPlayer, yCoordPlayer) { // Source from Bill Mei 
+    var position = [];
+    var newPosition = [];
+    x = parseInt(xCoordPlayer);
+    y = parseInt(yCoordPlayer);
+	for (var i = 0; i < ship.length; i++) {
+		if (ship.dir === 0) {
+            position[i] = x + i;
+            newPosition = position.map(function(loc) {
+                return 'p' + loc + y;
+            });
+		} else {
+            position[i] = y + i;
+            ewPosition = position.map(function(loc) {
+                return 'p' + x + loc;
+            });
+		}
+	}
+	return newPosition;
 }
+
 
 function rotateShip(ship) {
     if (ship.dir === 0) {
