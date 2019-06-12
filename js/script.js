@@ -1,4 +1,5 @@
-// Credit to Bill Mei for code. 
+// Credit to Bill Mei for code related to random ship placement.
+// Credit to https://github.com/LearnTeachCode for code related to the ai board 
 
 
 console.log("loaded");
@@ -72,11 +73,9 @@ for (let i = 0; i <= 9; i++) {
 
 // Event Listeners
 
-playerBoard.addEventListener("click", function(e) {
-    // Place ships
-    // Call the ships 
-    rowCoordPlayer = e.target.id.substring(1,2);
-    colCoordPlayer = e.target.id.substring(2,3);
+function pickShip() {
+// Selects the ship that I want to place
+    var selectedShip; 
     carrierButton.addEventListener("click", function(e) {
         var p1ShipCarrier = p1Ships[0];
         rotateButton.addEventListener("click", function(e) {
@@ -85,15 +84,6 @@ playerBoard.addEventListener("click", function(e) {
         p1ShipCarrier.location = placeShip(p1ShipCarrier, rowCoordPlayer, colCoordPlayer);
         var p1ShipCarrierLocation = p1ShipCarrier.location; 
         console.log(p1ShipCarrierLocation);
-    });
-    battleshipButton.addEventListener("click", function(e) {
-        var p1ShipBattleship = p1Ships[1];
-        rotateButton.addEventListener("click", function(e) {
-            rotateShip(p1ShipBattleship);
-        })
-        p1ShipBattleship.location = placeShip(p1ShipBattleship, rowCoordPlayer, colCoordPlayer);
-        var p1ShipBattleshipLocation = p1ShipBattleship.location; 
-        console.log(p1ShipBattleshipLocation);
     });
     destroyerButton.addEventListener("click", function(e) {
         var p1ShipDestroyer = p1Ships[2];
@@ -113,6 +103,15 @@ playerBoard.addEventListener("click", function(e) {
         var p1ShipSubmarineLocation = p1ShipSubmarine.location; 
         console.log(p1ShipSubmarineLocation);
     });
+    battleshipButton.addEventListener("click", function(e) {
+        var p1ShipBattleship = p1Ships[1];
+        rotateButton.addEventListener("click", function(e) {
+            rotateShip(p1ShipBattleship);
+        })
+        p1ShipBattleship.location = placeShip(p1ShipBattleship, rowCoordPlayer, colCoordPlayer);
+        var p1ShipBattleshipLocation = p1ShipBattleship.location; 
+        console.log(p1ShipBattleshipLocation);
+    });
     patrolButton.addEventListener("click", function(e) {
         var p1ShipPatrol = p1Ships[4];
         rotateButton.addEventListener("click", function(e) {
@@ -122,6 +121,14 @@ playerBoard.addEventListener("click", function(e) {
         var p1ShipPatrolLocation = p1ShipPatrol.location; 
         console.log(p1ShipPatrolLocation);
     });
+    
+}
+
+playerBoard.addEventListener("click", function(e) {
+    // Place ships
+    // Call the ships 
+    rowCoordPlayer = e.target.id.substring(1,2);
+    colCoordPlayer = e.target.id.substring(2,3);
     
 });
 
