@@ -38,6 +38,10 @@ const HORIZONTAL = 1;
 // 0 = empty, 1 = miss, 2 = undamaged ship, 3 = damaged ship, 4 = sunken ship
 var rowCoord; 
 var colCoord;
+var selectedShip; 
+var rowCoordPlayer;
+var colCoordPlayer;
+var divs = [];
 
 // Need AI random placement...ai placement for ship if x or y is less than or equal to a certain number. Loop through ids
 
@@ -73,65 +77,85 @@ for (let i = 0; i <= 9; i++) {
 
 // Event Listeners
 
-function pickShip() {
-// Selects the ship that I want to place
-    var selectedShip; 
-    carrierButton.addEventListener("click", function(e) {
-        var p1ShipCarrier = p1Ships[0];
-        rotateButton.addEventListener("click", function(e) {
-            rotateShip(p1ShipCarrier);
-        })
-        p1ShipCarrier.location = placeShip(p1ShipCarrier, rowCoordPlayer, colCoordPlayer);
-        var p1ShipCarrierLocation = p1ShipCarrier.location; 
-        console.log(p1ShipCarrierLocation);
-    });
-    destroyerButton.addEventListener("click", function(e) {
-        var p1ShipDestroyer = p1Ships[2];
-        rotateButton.addEventListener("click", function(e) {
-            rotateShip(p1ShipDestroyer);
-        })
-        p1ShipDestroyer.location = placeShip(p1ShipDestroyer, rowCoordPlayer, colCoordPlayer);
-        var p1ShipDestroyerLocation = p1ShipDestroyer.location; 
-        console.log(p1ShipDestroyerLocation);
-    });
-    submarineButton.addEventListener("click", function(e) {
-        var p1ShipSubmarine = p1Ships[3];
-        rotateButton.addEventListener("click", function(e) {
-            rotateShip(p1ShipSubmarine);
-        })
-        p1ShipSubmarine.location = placeShip(p1ShipSubmarine, rowCoordPlayer, colCoordPlayer);
-        var p1ShipSubmarineLocation = p1ShipSubmarine.location; 
-        console.log(p1ShipSubmarineLocation);
-    });
-    battleshipButton.addEventListener("click", function(e) {
-        var p1ShipBattleship = p1Ships[1];
-        rotateButton.addEventListener("click", function(e) {
-            rotateShip(p1ShipBattleship);
-        })
-        p1ShipBattleship.location = placeShip(p1ShipBattleship, rowCoordPlayer, colCoordPlayer);
-        var p1ShipBattleshipLocation = p1ShipBattleship.location; 
-        console.log(p1ShipBattleshipLocation);
-    });
-    patrolButton.addEventListener("click", function(e) {
-        var p1ShipPatrol = p1Ships[4];
-        rotateButton.addEventListener("click", function(e) {
-            rotateShip(p1ShipPatrol);
-        })
-        p1ShipPatrol.location = placeShip(p1ShipPatrol, rowCoordPlayer, colCoordPlayer);
-        var p1ShipPatrolLocation = p1ShipPatrol.location; 
-        console.log(p1ShipPatrolLocation);
-    });
-    
-}
 
+// Selects the ship that I want to place.
+carrierButton.addEventListener("click", function(e) {
+    selectedShip = p1Ships[0];
+    console.log(selectedShip);
+});
+battleshipButton.addEventListener("click", function(e) {
+    selectedShip = p1Ships[1];
+    console.log(selectedShip);
+});
+destroyerButton.addEventListener("click", function(e) {
+    selectedShip = p1Ships[2];
+    console.log(selectedShip);
+});
+submarineButton.addEventListener("click", function(e) {
+    selectedShip = p1Ships[3];
+    console.log(selectedShip);
+});
+patrolButton.addEventListener("click", function(e) {
+    selectedShip = p1Ships[4];
+    console.log(selectedShip);
+});
+
+rotateButton.addEventListener("click", function(e) {
+    //Need to hold the ship that you chose and then rotate the ship. 
+    rotateShip(selectedShip);
+});
+
+
+    
 playerBoard.addEventListener("click", function(e) {
     // Place ships
     // Call the ships 
     rowCoordPlayer = e.target.id.substring(1,2);
     colCoordPlayer = e.target.id.substring(2,3);
+    var rowID = [];
+    var colID = [];
+    console.log(selectedShip);
+    selectedShip.location = placeShip(selectedShip, rowCoordPlayer, colCoordPlayer);
+    var p1ShipLocation = selectedShip.location; 
+    console.log(p1ShipLocation);
+    console.log(e.target)
     
 });
 
+
+playerBoard.addEventListener("mouseover", function (e) {
+    rowCoordPlayer = e.target.id.substring(1,2);
+    colCoordPlayer = e.target.id.substring(2,3);
+    var row = parseInt(rowCoordPlayer);
+    var col = parseInt(colCoordPlayer);
+    var position = [];
+    var ids = [];
+    console.log(selectedShip);
+    for (var i = 0; i < selectedShip.length; i++) {
+		if (selectedShip.dir === VERTICAL) {
+            position[i] = row + i;
+            ids = position.map(function(loc) {
+                return '#p' + loc + col;
+            });
+		} else {
+            position[i] = col + i;
+            ids = position.map(function(loc) {
+                return '#p' + row + loc;
+            });
+		}
+    }
+    // console.log(ids.join(", "));
+    divs = document.querySelectorAll(ids.join(", "));
+    for (let i = 0; i < divs.length; i++) {
+        divs[i].classList.add("ship");
+    }
+});
+
+playerBoard.addEventListener("mouseout", function(e) {
+    for (let i = 0; i < divs.length; i++) {
+        divs[i].classList.remove("ship");
+    }
+});
 
 
 // battleshipButton.addEventListener("click", function(e) {
@@ -150,10 +174,7 @@ playerBoard.addEventListener("click", function(e) {
 
 // });
 
-// rotateButton.addEventListener("click", function(e) {
-//     //Need to hold the ship that you chose and then rotate the ship. 
-//     rotateShip(p1Ships[i]);
-// });
+
 
 resetButton.addEventListener("click", function(e) {
     resetGame();
@@ -166,7 +187,7 @@ resetButton.addEventListener("click", function(e) {
     
 // }
 
-function placeShip(ship, rowCoordPlayer, colCoordPlayer) { // Source from Bill Mei 
+function placeShip(ship, rowCoordPlayer, colCoordPlayer) { // Source: Modified from Bill Mei
     var position = [];
     var newPosition = [];
     var row = parseInt(rowCoordPlayer);
@@ -183,7 +204,8 @@ function placeShip(ship, rowCoordPlayer, colCoordPlayer) { // Source from Bill M
                 return 'p' + row + loc;
             });
 		}
-	}
+    }
+    document.getElementById(selectedShip.name).disabled = true; 
 	return newPosition;
 }
 
@@ -196,6 +218,8 @@ function rotateShip(ship) {
     }
 }
 
+
+
 // function checkPlacement() {
 
 // }
@@ -206,7 +230,7 @@ function rotateShip(ship) {
 
 
 
-function placeAIShipsRandomly() {
+function placeAIShipsRandomly() { // Source: Modified from Bill Mei
 	// var shipCoords;
 	for (var i = 0; i < aiShips.length; i++) {
         // Prevents the random placement of already placed ships
@@ -225,7 +249,7 @@ function placeAIShipsRandomly() {
     };
 }; 
 
-function checkPlacement (row, col, ship) {
+function checkPlacement (row, col, ship) { // Source: Modified from Bill Mei
 	// first, check if the ship is within the grid...
 	if (checkWithinBounds(row, col, ship)) {
 		// ...then check to make sure it doesn't collide with another ship
@@ -251,7 +275,7 @@ function checkPlacement (row, col, ship) {
 };
 
 
-function checkWithinBounds (row, col, ship) {
+function checkWithinBounds (row, col, ship) { // Source: Modified from Bill Mei
 	if (ship.dir === VERTICAL) {
 		return row + ship.length <= 9;
 	} else {
@@ -259,7 +283,7 @@ function checkWithinBounds (row, col, ship) {
 	}
 };
 
-function create(row, col, ship, direction) {
+function create(row, col, ship, direction) { // Source: Modified from Bill Mei
 	// This function assumes that you've already checked that the placement is legal
 	rowCoord = row;
     colCoord = col;
