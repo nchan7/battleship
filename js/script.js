@@ -7,11 +7,11 @@ console.log("loaded");
 var gameOver = false;
 var p1HitCount = 0;
 var aiHitCount = 0;
-var carrier = {name: 'carrier', length: 5, dir: 0, location: [], hit: []};
-var battleship = {name: 'battleship', length: 4, dir: 0, location: [], hit: []};
-var destroyer = {name: 'destroyer', length: 3, dir: 0, location: [], hit: []};
-var submarine = {name: 'submarine', length: 3, dir: 0, location: [], hit: []};
-var patrol = {name: 'patrol', length: 2, dir: 0, location: [], hit: []};
+var carrier = {name: 'carrier', length: 5, dir: 0, location: [], hit: [], placed: false};
+var battleship = {name: 'battleship', length: 4, dir: 0, location: [], hit: [], placed: false};
+var destroyer = {name: 'destroyer', length: 3, dir: 0, location: [], hit: [], placed: false};
+var submarine = {name: 'submarine', length: 3, dir: 0, location: [], hit: [], placed: false};
+var patrol = {name: 'patrol', length: 2, dir: 0, location: [], hit: [], placed: false};
 // dir = direction -> 0 = vertical, 1 = horizontal
 var p1Ships = [carrier, battleship, destroyer, submarine, patrol];
 var aiShips = [carrier, battleship, destroyer, submarine, patrol];
@@ -44,7 +44,6 @@ var colCoordPlayer;
 var divs = [];
 var cBoardHandle;
 var pBoardHandle;
-var clickHandle; 
 var mouseoutHandle;
 var mouseoverHandle;
 
@@ -83,7 +82,18 @@ for (let i = 0; i <= 9; i++) {
 // Event Listeners
 // Selects the ship that I want to place.
 
-function gameInit() {
+for (let i = 0; i < p1Ships.length; i++) {
+    if (p1Ships[i].location.length === 0) {
+        placeShips();
+        // playerBoard.removeEventListener("mouseover", mouseoverHandle);
+        // playerBoard.removeEventListener("click", pBoardHandle);
+    } else {
+        continue;
+    }
+}
+
+
+function placeShips() {
 
 
 
@@ -115,9 +125,12 @@ function gameInit() {
     });
 
 // This is for showing where the player is thinking about placing the ship
-    mouseoverHandle = playerBoard.addEventListener("mouseover", function (e) {
-        rowCoordPlayer = e.target.id.substring(1,2);
-        colCoordPlayer = e.target.id.substring(2,3);
+    playerBoard.addEventListener("mouseover", mouseoverHandle);
+
+    
+    function mouseoverHandle(event) {
+        rowCoordPlayer = event.target.id.substring(1,2);
+        colCoordPlayer = event.target.id.substring(2,3);
         var row = parseInt(rowCoordPlayer);
         var col = parseInt(colCoordPlayer);
         var position = [];
@@ -141,7 +154,9 @@ function gameInit() {
         for (let i = 0; i < divs.length; i++) {
             divs[i].classList.add("ship");
         }
-    });
+    };
+
+
     // playerBoard.removeEventListener("mouseover", mouseoverHandle);
 
     mouseoutHandle = playerBoard.addEventListener("mouseout", function (e) {
@@ -151,15 +166,18 @@ function gameInit() {
     });
     // playerBoard.removeEventListener("mouseout", mouseoutHandle);
 
-    pBoardHandle = playerBoard.addEventListener("click", function clickHandle(e) {
+    playerBoard.addEventListener("click", pBoardHandle); 
+
+
+    function pBoardHandle(event) {
         // Place ships
         // Call the ships 
-        rowCoordPlayer = e.target.id.substring(1,2);
-        colCoordPlayer = e.target.id.substring(2,3);
+        rowCoordPlayer = event.target.id.substring(1,2);
+        colCoordPlayer = event.target.id.substring(2,3);
         var rowID = [];
         var colID = [];
         console.log(selectedShip);
-        selectedShip.location = placeShip(selectedShip, rowCoordPlayer, colCoordPlayer);
+        selectedShip.location = dropShip(selectedShip, rowCoordPlayer, colCoordPlayer);
         var p1ShipLocation = selectedShip.location;
         p1ShipLocation = p1ShipLocation.map(function(loc){
             return '#' + loc;
@@ -169,12 +187,11 @@ function gameInit() {
         for (let i = 0; i < locationIDs.length; i++) {
             locationIDs[i].classList.add("placed")
         }
-        divs = [];
         
-        console.log(p1ShipLocation);
-        console.log(e.target)
-        
-    });
+    }
+    // playerBoard.removeEventListener("mouseover", mouseoverHandle);
+    // playerBoard.removeEventListener("mouseout", mouseoutHandle);
+    
 };
 
 
@@ -189,23 +206,26 @@ resetButton.addEventListener("click", function(e) {
     
 // }
 
-function placeShip(ship, rowCoordPlayer, colCoordPlayer) { // Source: Modified from Bill Mei
+function dropShip(ship, rowCoordPlayer, colCoordPlayer) { // Source: Modified from Bill Mei
     var position = [];
     var newPosition = [];
     var row = parseInt(rowCoordPlayer);
     var col = parseInt(colCoordPlayer);
-	for (var i = 0; i < ship.length; i++) {
-		if (ship.dir === VERTICAL) {
-            position[i] = row + i;
-            newPosition = position.map(function(loc) {
-                return 'p' + loc + col;
-            });
-		} else {
-            position[i] = col + i;
-            newPosition = position.map(function(loc) {
-                return 'p' + row + loc;
-            });
-		}
+	if (!ship.placed) {
+        for (var i = 0; i < ship.length; i++) {
+            if (ship.dir === VERTICAL) {
+                position[i] = row + i;
+                newPosition = position.map(function(loc) {
+                    return 'p' + loc + col;
+                });
+            } else {
+                position[i] = col + i;
+                newPosition = position.map(function(loc) {
+                    return 'p' + row + loc;
+                });
+            }
+        }
+        ship.placed = true;
     }
     document.getElementById(selectedShip.name).disabled = true; 
 	return newPosition;
@@ -286,7 +306,6 @@ function checkWithinBounds (row, col, ship) { // Source: Modified from Bill Mei
 };
 
 function create(row, col, ship, direction) { // Source: Modified from Bill Mei
-	// This function assumes that you've already checked that the placement is legal
 	rowCoord = row;
     colCoord = col;
     ship.dir = direction;
@@ -358,6 +377,9 @@ function endGame() {
 
 function resetGame() {
     gameOver = false;
+    for (let i = 0; i < p1Ships; i++) {
+        document.getElementById(p1Ships[i].name).disabled = false; 
+    }
 
 }
 
