@@ -42,6 +42,11 @@ var selectedShip;
 var rowCoordPlayer;
 var colCoordPlayer;
 var divs = [];
+var cBoardHandle;
+var pBoardHandle;
+var clickHandle; 
+var mouseoutHandle;
+var mouseoverHandle;
 
 // Need AI random placement...ai placement for ship if x or y is less than or equal to a certain number. Loop through ids
 
@@ -76,104 +81,101 @@ for (let i = 0; i <= 9; i++) {
 }
 
 // Event Listeners
-
-
 // Selects the ship that I want to place.
-carrierButton.addEventListener("click", function(e) {
-    selectedShip = p1Ships[0];
-    console.log(selectedShip);
-});
-battleshipButton.addEventListener("click", function(e) {
-    selectedShip = p1Ships[1];
-    console.log(selectedShip);
-});
-destroyerButton.addEventListener("click", function(e) {
-    selectedShip = p1Ships[2];
-    console.log(selectedShip);
-});
-submarineButton.addEventListener("click", function(e) {
-    selectedShip = p1Ships[3];
-    console.log(selectedShip);
-});
-patrolButton.addEventListener("click", function(e) {
-    selectedShip = p1Ships[4];
-    console.log(selectedShip);
-});
 
-rotateButton.addEventListener("click", function(e) {
-    //Need to hold the ship that you chose and then rotate the ship. 
-    rotateShip(selectedShip);
-});
+function gameInit() {
 
 
-    
-playerBoard.addEventListener("click", function(e) {
-    // Place ships
-    // Call the ships 
-    rowCoordPlayer = e.target.id.substring(1,2);
-    colCoordPlayer = e.target.id.substring(2,3);
-    var rowID = [];
-    var colID = [];
-    console.log(selectedShip);
-    selectedShip.location = placeShip(selectedShip, rowCoordPlayer, colCoordPlayer);
-    var p1ShipLocation = selectedShip.location; 
-    console.log(p1ShipLocation);
-    console.log(e.target)
-    
-});
+
+    carrierButton.addEventListener("click", function(e) {
+        selectedShip = p1Ships[0];
+        console.log(selectedShip);
+    });
+    battleshipButton.addEventListener("click", function(e) {
+        selectedShip = p1Ships[1];
+        console.log(selectedShip);
+    });
+    destroyerButton.addEventListener("click", function(e) {
+        selectedShip = p1Ships[2];
+        console.log(selectedShip);
+    });
+    submarineButton.addEventListener("click", function(e) {
+        selectedShip = p1Ships[3];
+        console.log(selectedShip);
+    });
+    patrolButton.addEventListener("click", function(e) {
+        selectedShip = p1Ships[4];
+        console.log(selectedShip);
+    });
 
 
-playerBoard.addEventListener("mouseover", function (e) {
-    rowCoordPlayer = e.target.id.substring(1,2);
-    colCoordPlayer = e.target.id.substring(2,3);
-    var row = parseInt(rowCoordPlayer);
-    var col = parseInt(colCoordPlayer);
-    var position = [];
-    var ids = [];
-    console.log(selectedShip);
-    for (var i = 0; i < selectedShip.length; i++) {
-		if (selectedShip.dir === VERTICAL) {
-            position[i] = row + i;
-            ids = position.map(function(loc) {
-                return '#p' + loc + col;
-            });
-		} else {
-            position[i] = col + i;
-            ids = position.map(function(loc) {
-                return '#p' + row + loc;
-            });
-		}
-    }
-    // console.log(ids.join(", "));
-    divs = document.querySelectorAll(ids.join(", "));
-    for (let i = 0; i < divs.length; i++) {
-        divs[i].classList.add("ship");
-    }
-});
+    rotateButton.addEventListener("click", function(e) {
+        //Need to hold the ship that you chose and then rotate the ship. 
+        rotateShip(selectedShip);
+    });
 
-playerBoard.addEventListener("mouseout", function(e) {
-    for (let i = 0; i < divs.length; i++) {
-        divs[i].classList.remove("ship");
-    }
-});
+// This is for showing where the player is thinking about placing the ship
+    mouseoverHandle = playerBoard.addEventListener("mouseover", function (e) {
+        rowCoordPlayer = e.target.id.substring(1,2);
+        colCoordPlayer = e.target.id.substring(2,3);
+        var row = parseInt(rowCoordPlayer);
+        var col = parseInt(colCoordPlayer);
+        var position = [];
+        var ids = [];
+        console.log(selectedShip);
+        for (var i = 0; i < selectedShip.length; i++) {
+            if (selectedShip.dir === VERTICAL) {
+                position[i] = row + i;
+                ids = position.map(function(loc) {
+                    return '#p' + loc + col;
+                });
+            } else {
+                position[i] = col + i;
+                ids = position.map(function(loc) {
+                    return '#p' + row + loc;
+                });
+            }
+        }
+        // console.log(ids.join(", "));
+        divs = document.querySelectorAll(ids.join(", "));
+        for (let i = 0; i < divs.length; i++) {
+            divs[i].classList.add("ship");
+        }
+    });
+    // playerBoard.removeEventListener("mouseover", mouseoverHandle);
 
+    mouseoutHandle = playerBoard.addEventListener("mouseout", function (e) {
+        for (let i = 0; i < divs.length; i++) {
+            divs[i].classList.remove("ship");
+        }
+    });
+    // playerBoard.removeEventListener("mouseout", mouseoutHandle);
 
-// battleshipButton.addEventListener("click", function(e) {
-
-// });
-
-// destroyerButton.addEventListener("click", function(e) {
-
-// });
-
-// submarineButton.addEventListener("click", function(e) {
-
-// });
-
-// patrolButton.addEventListener("click", function(e) {
-
-// });
-
+    pBoardHandle = playerBoard.addEventListener("click", function clickHandle(e) {
+        // Place ships
+        // Call the ships 
+        rowCoordPlayer = e.target.id.substring(1,2);
+        colCoordPlayer = e.target.id.substring(2,3);
+        var rowID = [];
+        var colID = [];
+        console.log(selectedShip);
+        selectedShip.location = placeShip(selectedShip, rowCoordPlayer, colCoordPlayer);
+        var p1ShipLocation = selectedShip.location;
+        p1ShipLocation = p1ShipLocation.map(function(loc){
+            return '#' + loc;
+        });
+        var locationIDs = document.querySelectorAll(p1ShipLocation.join(", "));
+        console.log(locationIDs);
+        for (let i = 0; i < locationIDs.length; i++) {
+            locationIDs[i].classList.add("placed")
+        }
+        divs = [];
+        
+        console.log(p1ShipLocation);
+        console.log(e.target)
+        
+    });
+};
 
 
 resetButton.addEventListener("click", function(e) {
