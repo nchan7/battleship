@@ -1,3 +1,6 @@
+// Credit to Bill Mei for code. 
+
+
 console.log("loaded");
 // Declare Variables
 var gameOver = false;
@@ -13,20 +16,29 @@ var p1Ships = [carrier, battleship, destroyer, submarine, patrol];
 var aiShips = [carrier, battleship, destroyer, submarine, patrol];
 var p1Targeted = [];
 var player = 0; // 0 is human and 1 is AI
-// var aiBoard = 
-// [[0,0,0,0,0,2,2,2,2,2],
-// [0,0,0,0,0,0,0,0,0,0],
-// [0,0,0,0,0,0,0,0,0,0],
-// [0,0,0,0,0,0,0,0,0,0],
-// [0,0,0,0,0,0,0,0,0,0],
-// [0,0,0,0,0,0,0,0,0,0],
-// [0,0,0,0,0,0,0,0,0,0],
-// [0,0,0,0,0,0,0,0,0,0],
-// [0,0,0,0,0,0,0,0,0,0],
-// [0,0,0,0,0,0,0,0,0,0]];
+var aiBoard = 
+[[0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0]];
+const EMPTY = 0;
+const MISS = 1;
+const SHIP = 2;
+const HIT = 3;
+const SUNK = 4; 
+const VERTICAL = 0;
+const HORIZONTAL = 1;
 // 0 = empty, 1 = miss, 2 = undamaged ship, 3 = damaged ship, 4 = sunken ship
-var xCoord; 
-var yCoord;
+var rowCoord; 
+var colCoord;
+
+// Need AI random placement...ai placement for ship if x or y is less than or equal to a certain number. Loop through ids
 
 //drag and drop library jQuery UI
 
@@ -41,6 +53,7 @@ var destroyerButton = document.getElementById("destroyer");
 var submarineButton = document.getElementById("submarine");
 var patrolButton = document.getElementById("patrol");
 var rotateButton = document.getElementById("rotate");
+var h2El = document.getElementById("end");
 
 // Create gameboards
 for (let i = 0; i <= 9; i++) {
@@ -62,14 +75,14 @@ for (let i = 0; i <= 9; i++) {
 playerBoard.addEventListener("click", function(e) {
     // Place ships
     // Call the ships 
-    xCoordPlayer = e.target.id.substring(1,2);
-    yCoordPlayer = e.target.id.substring(2,3);
+    rowCoordPlayer = e.target.id.substring(1,2);
+    colCoordPlayer = e.target.id.substring(2,3);
     carrierButton.addEventListener("click", function(e) {
         var p1ShipCarrier = p1Ships[0];
         rotateButton.addEventListener("click", function(e) {
             rotateShip(p1ShipCarrier);
         })
-        p1ShipCarrier.location = placeShip(p1ShipCarrier, xCoordPlayer, yCoordPlayer);
+        p1ShipCarrier.location = placeShip(p1ShipCarrier, rowCoordPlayer, colCoordPlayer);
         var p1ShipCarrierLocation = p1ShipCarrier.location; 
         console.log(p1ShipCarrierLocation);
     });
@@ -78,47 +91,39 @@ playerBoard.addEventListener("click", function(e) {
         rotateButton.addEventListener("click", function(e) {
             rotateShip(p1ShipBattleship);
         })
-        p1ShipBattleship.location = placeShip(p1ShipBattleship, xCoordPlayer, yCoordPlayer);
+        p1ShipBattleship.location = placeShip(p1ShipBattleship, rowCoordPlayer, colCoordPlayer);
+        var p1ShipBattleshipLocation = p1ShipBattleship.location; 
+        console.log(p1ShipBattleshipLocation);
     });
     destroyerButton.addEventListener("click", function(e) {
         var p1ShipDestroyer = p1Ships[2];
         rotateButton.addEventListener("click", function(e) {
             rotateShip(p1ShipDestroyer);
         })
-        p1ShipDestroyer.location = placeShip(p1ShipDestroyer, xCoordPlayer, yCoordPlayer);
+        p1ShipDestroyer.location = placeShip(p1ShipDestroyer, rowCoordPlayer, colCoordPlayer);
+        var p1ShipDestroyerLocation = p1ShipDestroyer.location; 
+        console.log(p1ShipDestroyerLocation);
     });
     submarineButton.addEventListener("click", function(e) {
         var p1ShipSubmarine = p1Ships[3];
         rotateButton.addEventListener("click", function(e) {
             rotateShip(p1ShipSubmarine);
         })
-        p1ShipSubmarine.location = placeShip(p1ShipSubmarine, xCoordPlayer, yCoordPlayer);
+        p1ShipSubmarine.location = placeShip(p1ShipSubmarine, rowCoordPlayer, colCoordPlayer);
+        var p1ShipSubmarineLocation = p1ShipSubmarine.location; 
+        console.log(p1ShipSubmarineLocation);
     });
     patrolButton.addEventListener("click", function(e) {
         var p1ShipPatrol = p1Ships[4];
         rotateButton.addEventListener("click", function(e) {
             rotateShip(p1ShipPatrol);
         })
-        p1ShipPatrol.location = placeShip(p1ShipPatrol, xCoordPlayer, yCoordPlayer);
+        p1ShipPatrol.location = placeShip(p1ShipPatrol, rowCoordPlayer, colCoordPlayer);
+        var p1ShipPatrolLocation = p1ShipPatrol.location; 
+        console.log(p1ShipPatrolLocation);
     });
-
+    
 });
-
-computerBoard.addEventListener("click", function(e) {
-    // target a square
-    // change the color 
-    // hit or miss
-    if(!(p1Targeted[e.target.id]) && !gameOver) {
-        p1Targeted.push(e.target.id);
-        xCoord = e.target.id.substring(1,2);
-        yCoord = e.target.id.substring(2,3);
-        // Check space
-        checkSpace(aiBoard, e, xCoord, yCoord);
-    }
-
-    // If player 
-
-})
 
 
 
@@ -154,21 +159,21 @@ resetButton.addEventListener("click", function(e) {
     
 // }
 
-function placeShip(ship, xCoordPlayer, yCoordPlayer) { // Source from Bill Mei 
+function placeShip(ship, rowCoordPlayer, colCoordPlayer) { // Source from Bill Mei 
     var position = [];
     var newPosition = [];
-    x = parseInt(xCoordPlayer);
-    y = parseInt(yCoordPlayer);
+    var row = parseInt(rowCoordPlayer);
+    var col = parseInt(colCoordPlayer);
 	for (var i = 0; i < ship.length; i++) {
-		if (ship.dir === 0) {
-            position[i] = x + i;
+		if (ship.dir === VERTICAL) {
+            position[i] = row + i;
             newPosition = position.map(function(loc) {
-                return 'p' + loc + y;
+                return 'p' + loc + col;
             });
 		} else {
-            position[i] = y + i;
-            ewPosition = position.map(function(loc) {
-                return 'p' + x + loc;
+            position[i] = col + i;
+            newPosition = position.map(function(loc) {
+                return 'p' + row + loc;
             });
 		}
 	}
@@ -177,25 +182,120 @@ function placeShip(ship, xCoordPlayer, yCoordPlayer) { // Source from Bill Mei
 
 
 function rotateShip(ship) {
-    if (ship.dir === 0) {
-        ship.dir = 1; 
+    if (ship.dir === VERTICAL) {
+        ship.dir = HORIZONTAL; 
     } else {
-        ship.dir = 0;
+        ship.dir = VERTICAL;
     }
 }
 
-function checkPlacement() {
+// function checkPlacement() {
 
-}
+// }
+
+// Computer Board 
+
+// Get random x and y coordinates
 
 
-function checkSpace(array, e, xCoord, yCoord) {
-    if (array[xCoord][yCoord] === 0) {
+
+function placeAIShipsRandomly() {
+	// var shipCoords;
+	for (var i = 0; i < aiShips.length; i++) {
+        // Prevents the random placement of already placed ships
+        var notPlaced = true; 
+        while (notPlaced) {
+            var randomRow = Math.floor(9 * Math.random());
+            var randomCol = Math.floor(9 * Math.random());
+            var randomDirection = Math.round(Math.random());
+            
+            if (checkPlacement(randomRow, randomCol, aiShips[i])) {
+                create(randomRow, randomCol, aiShips[i], randomDirection);
+                // shipCoords = this.fleetRoster[i].getAllShipCells();
+                notPlaced = false;
+            }
+        };
+    };
+}; 
+
+function checkPlacement (row, col, ship) {
+	// first, check if the ship is within the grid...
+	if (checkWithinBounds(row, col, ship)) {
+		// ...then check to make sure it doesn't collide with another ship
+		for (var i = 0; i < ship.length; i++) {
+			if (ship.dir === 0) {
+				if (aiBoard[row + i][col] === SHIP ||
+					aiBoard[row + i][col] === MISS ||
+					aiBoard[row + i][col] === SUNK) {
+					return false;
+				}
+			} else {
+				if (aiBoard[row][col + i] === SHIP ||
+					aiBoard[row][col + i] === MISS ||
+					aiBoard[row][col + i] === SUNK) {
+					return false;
+				}
+			}
+		}
+		return true;
+	} else {
+		return false;
+	}
+};
+
+
+function checkWithinBounds (row, col, ship) {
+	if (ship.dir === VERTICAL) {
+		return row + ship.length <= 9;
+	} else {
+		return col + ship.length <= 9;
+	}
+};
+
+function create(row, col, ship, direction) {
+	// This function assumes that you've already checked that the placement is legal
+	rowCoord = row;
+    colCoord = col;
+    ship.dir = direction;
+    for (var i = 0; i < ship.length; i++) {
+        if (ship.dir === VERTICAL) {
+            aiBoard[rowCoord + i][colCoord] = SHIP;
+        } else {
+            aiBoard[rowCoord][colCoord + i] = SHIP;
+        }
+    }
+
+	
+};
+
+placeAIShipsRandomly();
+console.log(aiBoard);
+
+
+cBoardHandle = computerBoard.addEventListener("click", function(e) {
+    // target a square
+    // change the color 
+    // hit or miss
+    if(!(p1Targeted[e.target.id]) && !gameOver) {
+        p1Targeted.push(e.target.id);
+        rowCoord = e.target.id.substring(1,2);
+        colCoord = e.target.id.substring(2,3);
+        // Check space
+        checkSpace(aiBoard, e, rowCoord, colCoord);
+    }
+
+    // If player 
+
+})
+
+function checkSpace(array, e, rowCoord, yCoord) {
+    if (array[rowCoord][yCoord] === 0) {
         e.target.classList.add("miss");
-        array[xCoord][yCoord] = 1;
-    } else if (array[xCoord][yCoord] === 2) {
+        array[rowCoord][colCoord] = 1;
+    } else if (array[rowCoord][colCoord] === 2) {
         e.target.classList.add("hit");
-        array[xCoord][yCoord] = 3;
+        array[rowCoord][colCoord] = 3;
+        p1HitCount++;
         // Check win
         // checkSunk(array);
         checkWin();
@@ -208,14 +308,19 @@ function checkSunk() {
 }
 
 function checkWin() {
-    if(!p1Ships.length || !aiShips.length) {
+    if(p1HitCount >= 17 || aiHitCount >= 17) {
         endGame();
     }
 }
 
 function endGame() {
     gameOver = true;
-    //create class with all values as true or false...in endGame change them all to true;
+    computerBoard.removeEventListener("click", cBoardHandle); 
+    if (p1HitCount >= 17) {
+        h2El.textContent = "Your enemy has been annihilated. You're due for a promotion."
+    } else {
+        h2El.textContent = "Your navy has been decimated."
+    }
 }
 
 function resetGame() {
