@@ -30,7 +30,8 @@ h2 {
     text-align: center;
 }
 
-h4 {
+h3 {
+    display: inline-block;
     margin: 20px auto 010px auto;
     color:  rgb(225,225,225); 
     text-align: center;
