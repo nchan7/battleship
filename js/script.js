@@ -16,6 +16,7 @@ var patrol = {name: 'patrol', length: 2, dir: 0, location: [], hit: [], placed: 
 var p1Ships = [carrier, battleship, destroyer, submarine, patrol];
 var aiShips = [carrier, battleship, destroyer, submarine, patrol];
 var p1Targeted = [];
+var aiTargeted = [];
 var player = 0; // 0 is human and 1 is AI
 var aiBoard = 
 [[0,0,0,0,0,0,0,0,0,0],
@@ -82,16 +83,18 @@ for (let i = 0; i <= 9; i++) {
 // Event Listeners
 // Selects the ship that I want to place.
 
-for (let i = 0; i < p1Ships.length; i++) {
-    if (p1Ships[i].location.length === 0) {
-        placeShips();
-        // playerBoard.removeEventListener("mouseover", mouseoverHandle);
-        // playerBoard.removeEventListener("click", pBoardHandle);
-    } else {
-        continue;
-    }
-}
+// for (let i = 0; i < p1Ships.length; i++) {
+//     if (p1Ships[i].location.length === 0) {
+        
+//     } else {
+//         continue;
+//     }
+// }
 
+placeShips();
+playerBoard.removeEventListener("mouseover", mouseoverHandle);
+playerBoard.removeEventListener("mouseout", mouseoutHandle);
+playerBoard.removeEventListener("click", pBoardHandle);
 
 function placeShips() {
 
@@ -159,11 +162,15 @@ function placeShips() {
 
     // playerBoard.removeEventListener("mouseover", mouseoverHandle);
 
-    mouseoutHandle = playerBoard.addEventListener("mouseout", function (e) {
+    playerBoard.addEventListener("mouseout", mouseoutHandle);
+    
+    function mouseoutHandle(event) {
+
         for (let i = 0; i < divs.length; i++) {
             divs[i].classList.remove("ship");
         }
-    });
+    
+    };
     // playerBoard.removeEventListener("mouseout", mouseoutHandle);
 
     playerBoard.addEventListener("click", pBoardHandle); 
@@ -202,9 +209,7 @@ resetButton.addEventListener("click", function(e) {
 
 
 // Additional Functions
-// function aiPlay() {
-    
-// }
+
 
 function dropShip(ship, rowCoordPlayer, colCoordPlayer) { // Source: Modified from Bill Mei
     var position = [];
@@ -335,13 +340,15 @@ cBoardHandle = computerBoard.addEventListener("click", function(e) {
         // Check space
         checkSpace(aiBoard, e, rowCoord, colCoord);
     }
+    aiGuess();
+    checkWin();
 
     // If player 
 
 })
 
-function checkSpace(array, e, rowCoord, yCoord) {
-    if (array[rowCoord][yCoord] === 0) {
+function checkSpace(array, e, rowCoord, colCoord) {
+    if (array[rowCoord][colCoord] === 0) {
         e.target.classList.add("miss");
         array[rowCoord][colCoord] = 1;
     } else if (array[rowCoord][colCoord] === 2) {
@@ -350,10 +357,33 @@ function checkSpace(array, e, rowCoord, yCoord) {
         p1HitCount++;
         // Check win
         // checkSunk(array);
-        checkWin();
+        
 
     };
 }
+
+function aiGuess() {
+    var randomRow = Math.floor(9 * Math.random());
+    var randomCol = Math.floor(9 * Math.random());
+    var pID = "p" + randomRow + randomCol; 
+    console.log(pID);
+    if (!aiTargeted.includes(pID)) {
+        //Check the id and see if it's in any of hte location and if it is store in hit and 
+        for (let i = 0; i < p1Ships.length; i++) {
+            if (p1Ships[i].location.includes(pID) && !p1Ships[i].hit.includes(pID)) {   
+                p1Ships[i].hit.push(pID);
+                document.getElementById(pID).classList.remove("placed");
+                document.getElementById(pID).classList.add("hit");
+                aiTargeted.push(pID);
+                aiHitCount++;
+            } else if (!p1Ships[i].location.includes(pID)) {
+                document.getElementById(pID).classList.add("miss");
+                aiTargeted.push(pID);
+            }
+        }
+    }
+}
+
 function checkSunk() {
     
     //check if position matches placement
