@@ -22,15 +22,12 @@ h1 {
     margin: 50px auto 0px auto;
     color: white; 
     text-align: center;
-    
 }
 
 h2 {
     margin: 20px auto 0px auto;
-    color:  rgb(225,225,225); 
+    color:  rgb(245,245,245); 
     text-align: center;
-    
-    
 }
 
 h4 {
@@ -116,7 +113,7 @@ button {
 }
 
 .miss {
-    background-color: white;
+    background-color: rgba(255,255,255,.95);
 }
 
 .hit {
@@ -132,5 +129,14 @@ button {
 }
 
 .placed {
-    background-color: rgba(255, 255, 255, .8);
+    background-color: rgba(167, 169, 171, .85);
+}
+
+@keyframes Slide_Down {
+    0% {
+        transform: translateY(500px);
+    }
+    100% {
+        transform: translateY(0);
+    }
 }

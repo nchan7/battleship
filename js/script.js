@@ -66,20 +66,22 @@ var rotateButton = document.getElementById("rotate");
 var h2El = document.getElementById("end");
 
 // Create gameboards
-for (let i = 0; i <= 9; i++) {
-    for (let j = 0; j <= 9; j++) {
-        var playerSquare = document.createElement("div");
-        playerBoard.appendChild(playerSquare);
-        playerSquare.classList.add("square")
-        playerSquare.id = "p" + i + j; 
-        var computerSquare = document.createElement("div");
-        computerBoard.appendChild(computerSquare);
-        computerSquare.classList.add("square")
-        computerSquare.id = "c" + i + j; 
-        
+function createGameBoards () {
+    for (let i = 0; i <= 9; i++) {
+        for (let j = 0; j <= 9; j++) {
+            var playerSquare = document.createElement("div");
+            playerBoard.appendChild(playerSquare);
+            playerSquare.classList.add("square")
+            playerSquare.id = "p" + i + j; 
+            var computerSquare = document.createElement("div");
+            computerBoard.appendChild(computerSquare);
+            computerSquare.classList.add("square")
+            computerSquare.id = "c" + i + j; 
+            
+        }
     }
-}
-
+};
+    
 // Event Listeners
 // Selects the ship that I want to place.
 
@@ -90,11 +92,16 @@ for (let i = 0; i <= 9; i++) {
 //         continue;
 //     }
 // }
-
+createGameBoards();
+startButton.disabled = true;
 placeShips();
-playerBoard.removeEventListener("mouseover", mouseoverHandle);
-playerBoard.removeEventListener("mouseout", mouseoutHandle);
-playerBoard.removeEventListener("click", pBoardHandle);
+if (carrierButton.disabled && battleshipButton.disabled = true && destroyerButton.disabled = true && submarineButton.disabled = true && patrolButton.disabled = true) {
+
+}
+
+// playerBoard.removeEventListener("mouseover", mouseoverHandle);
+// playerBoard.removeEventListener("mouseout", mouseoutHandle);
+// playerBoard.removeEventListener("click", pBoardHandle);
 
 function placeShips() {
 
@@ -141,15 +148,19 @@ function placeShips() {
         console.log(selectedShip);
         for (var i = 0; i < selectedShip.length; i++) {
             if (selectedShip.dir === VERTICAL) {
-                position[i] = row + i;
-                ids = position.map(function(loc) {
-                    return '#p' + loc + col;
-                });
+                if (row <= 10 - selectedShip.length) {
+                    position[i] = row + i;
+                    ids = position.map(function(loc) {
+                        return '#p' + loc + col;
+                    });
+                }
             } else {
-                position[i] = col + i;
-                ids = position.map(function(loc) {
-                    return '#p' + row + loc;
-                });
+                if (col <= 10 - selectedShip.length) {
+                    position[i] = col + i;
+                    ids = position.map(function(loc) {
+                        return '#p' + row + loc;
+                    });
+                }
             }
         }
         // console.log(ids.join(", "));
@@ -219,20 +230,28 @@ function dropShip(ship, rowCoordPlayer, colCoordPlayer) { // Source: Modified fr
 	if (!ship.placed) {
         for (var i = 0; i < ship.length; i++) {
             if (ship.dir === VERTICAL) {
-                position[i] = row + i;
-                newPosition = position.map(function(loc) {
-                    return 'p' + loc + col;
-                });
+                if (row <= 10 - ship.length) {
+
+                    position[i] = row + i;
+                    newPosition = position.map(function(loc) {
+                        return 'p' + loc + col;
+                    });
+                    ship.placed = true;
+                    document.getElementById(selectedShip.name).disabled = true; 
+                }
             } else {
-                position[i] = col + i;
-                newPosition = position.map(function(loc) {
-                    return 'p' + row + loc;
-                });
+                if (col <= 10 - ship.length) {
+                    position[i] = col + i;
+                    newPosition = position.map(function(loc) {
+                        return 'p' + row + loc;
+                    });
+                    ship.placed = true;
+                    document.getElementById(selectedShip.name).disabled = true; 
+                }
             }
         }
-        ship.placed = true;
+        
     }
-    document.getElementById(selectedShip.name).disabled = true; 
 	return newPosition;
 }
 
@@ -277,11 +296,11 @@ function placeAIShipsRandomly() { // Source: Modified from Bill Mei
 }; 
 
 function checkPlacement (row, col, ship) { // Source: Modified from Bill Mei
-	// first, check if the ship is within the grid...
-	if (checkWithinBounds(row, col, ship)) {
-		// ...then check to make sure it doesn't collide with another ship
+	// First, check if the ship is within the grid
+	if (checkWithinBounds(row, col, ship)) { // Source: Modified from LearnTeachCode
+		// Then check to make sure it doesn't collide with another ship
 		for (var i = 0; i < ship.length; i++) {
-			if (ship.dir === 0) {
+			if (ship.dir === VERTICAL) {
 				if (aiBoard[row + i][col] === SHIP ||
 					aiBoard[row + i][col] === MISS ||
 					aiBoard[row + i][col] === SUNK) {
@@ -382,7 +401,7 @@ function aiGuess() {
             }
         }
     }
-}
+};
 
 function checkSunk() {
     
