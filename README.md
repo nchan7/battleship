@@ -210,6 +210,8 @@ An interesting note regarding audio was that I found out that I needed to pause 
 * HTML 
 * CSS
 * Javascript
+* Google Fonts
+* Audio files
 
 
 ### Credit To:
