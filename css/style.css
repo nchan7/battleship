@@ -19,7 +19,25 @@ main {
 }
 
 #intro {
-    background-color: 
+    text-shadow: 1.7px 1.7px 2px #000;
+}
+
+#player {
+    position: absolute; 
+    top: 275px;
+    left: 50px;
+    right: 880px; 
+    bottom: 300px;
+    height: 30px;
+}
+
+#enemy {
+    position: absolute; 
+    top: 275px;
+    left: 880px;
+    right: 50px; 
+    bottom: 300px;
+    height: 30px;
 }
 
 h1 {
@@ -35,20 +53,20 @@ h2 {
 }
 
 h3 {
-    display: inline-block;
-    margin: 20px auto 010px auto;
-    color:  rgb(225,225,225); 
+    margin: 20px auto 10px auto;
+    color:  rgb(245,245,245); 
     text-align: center;
-    
+    text-shadow: 2px 2px 2px #000;
+
 }
 
 section {
     border: 3px solid black;
 }
 
-footer { 
+#reset { 
     margin-top: 0;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
@@ -66,22 +84,26 @@ footer {
 }
 
 #rotate {
-    width: 50px; 
+    width: 75px; 
 }
 
 button {
     font-family: 'Open Sans';
     color: #333333;
-    height: 25px;
+    height: 30px;
     margin-top: 7px; 
-    width: 75px; 
+    width: 100px; 
     text-align: center;
     font-size: 14px; 
 }
 
+button:hover {
+    background-color: rgba(215, 180, 115, .6);
+}
+
 #start {
     position: absolute; 
-    top: 250px;
+    top: 300px;
     left: 100px;
     right: 100px; 
     bottom: 250px;

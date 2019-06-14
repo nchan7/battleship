@@ -11,14 +11,16 @@
 <body id="body">
     <div id="intro">
         <h1>Battle for Naval Domination</h1>
-        <h2>Good morning admiral. <br>
-            At 0430 enemy ships have been located 50 miles from your position. <br>
-            Your orders are to find and destroy the enemy navy.</h2>
+        <h2 id="instructions1">Good morning admiral. <br>
+            At 0430, five enemy ships have been located 50 miles from your position. <br>
+            Your orders are to find and destroy the enemy navy. <br>
+            Godspeed. </h2>
+        <h3 id="instructions2" class="hidden">1. Place your ships <br>2. When you're ready "Commence Operation" <br> 3. Target the enemy field <br> 4. The enemy will fire back immediately</h3>
         <h2 id="end"></h2>
-        <button id="start">Play</button>
+        <button id="start">Start</button>
     </div>
     <main id="main" class="hidden">
-        <h3>Your Fleet</h3>
+        <h3 id="player">YOUR FLEET</h3>
         <section id="playerboard">
         </section>
         <div id="ships">
@@ -32,7 +34,7 @@
             <button id="fire">Commence Operation</button>
         </div>
         
-        <h3>Enemy Fleet</h3>
+        <h3 id="enemy">ENEMY FLEET</h3>
         <section id="computerboard">
         </section>
         

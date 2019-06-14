@@ -65,7 +65,10 @@ document.addEventListener("DOMContentLoaded", function() {
     var submarineButton = document.getElementById("submarine");
     var patrolButton = document.getElementById("patrol");
     var rotateButton = document.getElementById("rotate");
-    var h2El = document.getElementById("end");
+    var intro = document.getElementById("intro")
+    var h2El = document.getElementById("instructions1");
+    var h3El = document.getElementById("instructions2");
+    var h2El2 = document.getElementById("end");
     var hitSound = document.getElementById("hitsound");
     var missSound = document.getElementById("misssound");
     var backgroundSound = document.getElementById("backgroundsound");
@@ -283,7 +286,7 @@ startButton.addEventListener("click", function(e) {
             var locationIDs = document.querySelectorAll(p1ShipLocation.join(", "));
             console.log(locationIDs);
             for (let i = 0; i < locationIDs.length; i++) {
-                locationIDs[i].classList.add("placed")
+                locationIDs[i].classList.add("placed");
             }
             
         }
@@ -370,20 +373,25 @@ startButton.addEventListener("click", function(e) {
         footer.classList.remove("hidden");
         footer.classList.add("visible");
         createGameBoards();
-        if (carrierButton.disabled && battleshipButton.disabled && destroyerButton.disabled && submarineButton.disabled && patrolButton.disabled) {
-            startButton.disabled = false; 
-        } else {
-            startButton.disabled = true;
-        }
+        // if (carrierButton.disabled && battleshipButton.disabled && destroyerButton.disabled && submarineButton.disabled && patrolButton.disabled) {
+        //     startButton.disabled = false; 
+        // } else {
+        //     startButton.disabled = true;
+        // }
         placeShips();
         placeAIShipsRandomly();
+        commenceOperationButton.disabled = false;
         console.log(aiBoard);
     };
             
             
     startButton.addEventListener("click", function(e) {
         gameInit();
-        startButton.classList.add("hidden"); 
+        intro.removeChild(startButton);
+        intro.removeChild(h2El);
+        h3El.classList.add("visible");
+        // startButton.classList.add("hidden"); 
+        // h2El.classList.add("hidden");
     })        
             
             
@@ -399,9 +407,9 @@ startButton.addEventListener("click", function(e) {
             gameOver = true;
             computerBoard.removeEventListener("click", cBoardHandle); 
             if (p1HitCount >= 17) {
-                h2El.textContent = "Your enemy has been annihilated. You're due for a promotion."
+                h2El2.textContent = "Your enemy has been annihilated. You're due for a promotion."
             } else {
-                h2El.textContent = "Your navy has been decimated."
+                h2El2.textContent = "Your navy has been decimated."
             }
         };
         
@@ -465,7 +473,9 @@ startButton.addEventListener("click", function(e) {
                 // Check space
                 checkSpace(aiBoard, e, rowCoord, colCoord);
             }
-            aiGuess();
+            setTimeout(function() {
+                aiGuess() 
+            }, 1000);
             checkWin();
             
             
@@ -476,8 +486,8 @@ startButton.addEventListener("click", function(e) {
 
     commenceOperationButton.addEventListener("click", function(e) {
         commenceOperation();
+        commenceOperationsButton.disabled = true; 
     });
-
 
             
 // 4. Reset           
@@ -485,10 +495,43 @@ startButton.addEventListener("click", function(e) {
             
     function resetGame() {
         gameOver = false;
-        for (let i = 0; i < p1Ships; i++) {
+        for (let i = 0; i < p1Ships.length; i++) {
             document.getElementById(p1Ships[i].name).disabled = false; 
             document.getElementById(p1Ships[i].placed = false);
+            document.getElementById(p1Ships[i].name).classList.remove("placed");
+            document.getElementById(p1Ships[i].location = []);
+            document.getElementById(p1Ships[i].hit = []);
         };
+        p1HitCount = 0;
+        aiHitCount = 0;
+        p1Targeted = [];
+        aiTargeted = [];     
+        aiBoard = 
+        [[0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0]];
+        rowCoord = 0; 
+        colCoord = 0;
+        selectedShip = null; 
+        rowCoordPlayer = "";
+        colCoordPlayer = "";
+        divs = [];
+        while (playerBoard.firstChild) {
+            playerBoard.removeChild(playerBoard.firstChild);
+        };
+        while (computerBoard.firstChild) {
+            computerBoard.removeChild(computerBoard.firstChild);
+        };
+        h2El2.textContent = "";
+        gameInit();
+        playBackgroundSound();
 
         
     };
