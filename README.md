@@ -219,6 +219,9 @@ An interesting note regarding audio was that I found out that I needed to pause 
     * Provided the thought process and code for creating the gameboard. 
     * Provided the inspiration for how to check whether a player has hit or missed a ship. 
 
+#### Additional Collaborators:
+Thanks to Steve Peters, Carlo Bruno, Mike Shull, and Hayden Schultz for their ideas and thoughts that were incorporated in this project
+
 ### Additional Functionality and Wish List
 * Using ship images for the actual ships
 * Do not allow the player to fire on the same spot if he or she has already clicked on that spot. 
