@@ -69,6 +69,8 @@ document.addEventListener("DOMContentLoaded", function() {
     var h2El = document.getElementById("instructions1");
     var h3El = document.getElementById("instructions2");
     var h2El2 = document.getElementById("end");
+    var pFleetEl = document.getElementById("player");
+    var cFleetEl = document.getElementById("enemy");
     var hitSound = document.getElementById("hitsound");
     var missSound = document.getElementById("misssound");
     var backgroundSound = document.getElementById("backgroundsound");
@@ -298,9 +300,17 @@ startButton.addEventListener("click", function(e) {
     // Begin placement of AI ships. First function checks whether or not placement is within the bounds of the grid.
     function checkWithinBounds (row, col, ship) { // Source: Modified from Bill Mei
         if (ship.dir === VERTICAL) {
-            return row + ship.length <= 9;
+            if (row + ship.length < 9) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            return col + ship.length <= 9;
+            if (col + ship.length < 9) {
+                return true;
+            } else {
+                return false;
+            }
         }
     };
     
@@ -352,8 +362,8 @@ startButton.addEventListener("click", function(e) {
             // Prevents the random placement of already placed ships
             var notPlaced = true; 
             while (notPlaced) {
-                var randomRow = Math.floor(9 * Math.random());
-                var randomCol = Math.floor(9 * Math.random());
+                var randomRow = Math.floor(5 * Math.random());
+                var randomCol = Math.floor(5 * Math.random());
                 var randomDirection = Math.round(Math.random());
                 
                 if (checkPlacement(randomRow, randomCol, aiShips[i])) {
@@ -408,8 +418,12 @@ startButton.addEventListener("click", function(e) {
             computerBoard.removeEventListener("click", cBoardHandle); 
             if (p1HitCount >= 17) {
                 h2El2.textContent = "Your enemy has been annihilated. You're due for a promotion."
+                pFleetEl.classList.add("position2");
+                cFleetEl.classList.add("position2");
             } else {
                 h2El2.textContent = "Your navy has been decimated."
+                pFleetEl.classList.add("position2");
+                cFleetEl.classList.add("position2");
             }
         };
         
