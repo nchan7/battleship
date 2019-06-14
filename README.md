@@ -145,7 +145,46 @@ This process followed the below steps:
 4. The player can click to place the ship and once the ship has been placed you can no longer place another one of the same ship. 
 
 ### Mouseover and Mouseoff 
-What was challenging was showing where the player was thinking about placing the ship. The mouseover and mouseoff event listeners were used to display which cells the ship would be placed. Ultimately, this was done by choosing the cells and changing the class of the cells to incorporate CSS styling. 
+What was challenging was showing where the player was thinking about placing the ship. The mouseover and mouseoff event listeners were used to display which cells the ship would be placed. Ultimately, this was done by choosing the cells and changing the class of the cells to incorporate CSS styling.
+
+
+```
+playerBoard.addEventListener("mouseover", mouseoverHandle);
+        
+        
+        function mouseoverHandle(event) {
+            rowCoordPlayer = event.target.id.substring(1,2);
+            colCoordPlayer = event.target.id.substring(2,3);
+            var row = parseInt(rowCoordPlayer);
+            var col = parseInt(colCoordPlayer);
+            var position = [];
+            var ids = [];
+            console.log(selectedShip);
+            for (var i = 0; i < selectedShip.length; i++) {
+                if (selectedShip.dir === VERTICAL) {
+                    if (row <= 10 - selectedShip.length) {
+                        position[i] = row + i;
+                        ids = position.map(function(loc) {
+                            return '#p' + loc + col;
+                        });
+                    }
+                } else {
+                    if (col <= 10 - selectedShip.length) {
+                        position[i] = col + i;
+                        ids = position.map(function(loc) {
+                            return '#p' + row + loc;
+                        });
+                    }
+                }
+            }
+            // console.log(ids.join(", "));
+            divs = document.querySelectorAll(ids.join(", "));
+            for (let i = 0; i < divs.length; i++) {
+                divs[i].classList.add("ship");
+            }
+        };
+
+```
 
 ##### Placement:
 <img src="./img/battleship_placement.png" height = 200px width = 400px>
