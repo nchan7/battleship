@@ -7,13 +7,12 @@
 ## Introduction 
 The classic game of Battleship pitting two opponents against one another which incorporates strategic thinking and crucial decision making. 
 
-
-Image of the original game
-![alt text](.img/originalbattleship.png "Original Battleship")
-
+##### Original game:
+<img src="./img/originalbattleship.jpg" height = 200px width = 400px>
 
 
-Image of my version of the game
+##### Screenshot of the gameplay:
+<img src="./img/battleship_game.png" height = 200px width = 400px>
 
 
 ## Project Requirements
@@ -47,9 +46,12 @@ Overall the game uses two grid elements: one for the player's board and the othe
 ### Whiteboarding
 Initial design of the project and the necessary components were designed on pen and paper to brainstorm necessary variables, DOM elements, functionality, and logic of the game. 
 
-Insert Image
+##### Whiteboarding thought process:
+<img src="./img/whiteboard1.jpg" height = 250px width = 400px>
 
-Insert IMage
+
+<img src="./img/whiteboard2.jpg" height = 250px width = 400px>
+
 
 
 After some initial planning, the overall flow of the gameplay is as follows:
@@ -145,7 +147,8 @@ This process followed the below steps:
 ### Mouseover and Mouseoff 
 What was challenging was showing where the player was thinking about placing the ship. The mouseover and mouseoff event listeners were used to display which cells the ship would be placed. Ultimately, this was done by choosing the cells and changing the class of the cells to incorporate CSS styling. 
 
-Screenshot
+##### Placement:
+<img src="./img/battleship_placement.png" height = 200px width = 400px>
 
 ## Gameplay 
 This aspect provide an additional challenge as I needed to combine allow the player to interact with the computer board and the AI to interact with the player's board. 
