@@ -1,14 +1,18 @@
 # Battle of the Ships
 ## Nathan Chan | June 14, 2019
 ### General Assembly - Software Engineering Immersive Project 1: HTML, CSS, Javascript
-#### A link to the game can be found here
+#### A link to the game can be found here: 
 
 
 ## Introduction 
 The classic game of Battleship pitting two opponents against one another which incorporates strategic thinking and crucial decision making. 
 
 
-Image of the game
+Image of the original game
+
+
+
+Image of my version of the game
 
 
 ## Project Requirements
@@ -34,8 +38,10 @@ Your app must:
 # Building the App
 This section presents the thought process that went into the creation of this game. 
 
+*This project was designed for desktop implementation only*
+
 ## Thought Process
-Overall the game uses two grid elements: one for the player's board and the other for the computer's board. The project includes manipulation of arrays and objects as well as an AI which will play against the user. 
+Overall the game uses two grid elements: one for the player's board and the other for the computer's board. The project includes manipulation of arrays and objects as well as an AI which will play against the player. 
 
 ### Whiteboarding
 Initial design of the project and the necessary components were designed on pen and paper to brainstorm necessary variables, DOM elements, functionality, and logic of the game. 
@@ -47,9 +53,9 @@ Insert IMage
 
 After some initial planning, the overall flow of the gameplay is as follows:
 1. Upon page load, a Start Screen appears. The player can click Start to play the game when he or she is ready. 
-2. User can place ships on his or her board and is not allowed to fire on opponent's board. 
-3. Once ships are placed then the user can begin firing on the opponent's board. The opponent will fire back after the user takes a turn. 
-4. Once there is a winnner, the game ends and the user can reset the gameboard and start over.
+2. Player can place ships on his or her board and is not allowed to fire on opponent's board. 
+3. Once ships are placed then the player can begin firing on the opponent's board. The opponent will fire back after the player takes a turn. 
+4. Once there is a winnner, the game ends and the player can reset the gameboard and start over.
 
 
 After page load and once the Start button has been clicked, the actual game play was designed by breaking down the game into its simplest component which revolves around one turn of the game. This would is also constitute the game loop. 
@@ -60,9 +66,32 @@ The project design essentially followed two tracks.
 2. The player's board and actions 
 
 
-## Gameboard Creation
+## Gameboard Creation and Ship Creation
 
+### Gameboard
+Rather than creating the gameboard in the HTML file, the gameboards were created in Javascript by accessing the DOM element in which I wanted to create the grid and iterating through to create the appropriate grid cells while giving them a coordinate ID which is important for other aspects of the game. 
 
+```
+function createGameBoards () {
+        for (let i = 0; i <= 9; i++) {
+            for (let j = 0; j <= 9; j++) {
+                var playerSquare = document.createElement("div");
+                playerBoard.appendChild(playerSquare);
+                playerSquare.classList.add("square")
+                playerSquare.id = "p" + i + j; 
+                var computerSquare = document.createElement("div");
+                computerBoard.appendChild(computerSquare);
+                computerSquare.classList.add("square")
+                computerSquare.id = "c" + i + j; 
+                
+            }
+        }
+    };
+```
+### Ships
+The ships were created as objects as objects provide the benefit of being able to associate different attributes to one particular object (in this case a ship). 
+
+The ships were initialized with a name, a length of the ship, a location array to store the location IDs, and a hit array to store the IDs that consitute a hit. 
 
 ## AI's Board
 
@@ -89,13 +118,42 @@ const SUNK = 4;
 ```
 
 ### Random Placement of Ships
+The placement of the ships was done by randomly generating a "2" to place into the aiBoard variable. The number of "2s" to place were determined based on the length of the ships which were accessed through the ship objects. 
 
 ### Checking the Placement of Ships
+However, there are some limitations as to where the ships can be placed:
+1. The ships cannot be placed off the grid
+2. The ships cannot be placed where another ship exists
+
+These limitations were incorporated into the Random Placement of Ships functionality. 
 
 ## Player's Board
-This was the most challenging aspect of this project. How can the user place a ship, change the rotation and for that choice to display visually. 
+This was the most challenging aspect of this project. How can the player place a ship, change the rotation and for that choice to display visually. 
+
+Instead of creating an array with values that can be hardcoded. The player board grid elements were accessed with their HTML IDs. 
 
 ### Placement and Rotation
+What made this challenging was the placement of the ships while allowing the player the opportunity to choose which ship to place and to rotate the ship as desired.
+
+This process followed the below steps:
+1. The player can select which ship he or she wants to place using the provided buttons
+2. The player can see where he or she is thinking about placing the ship by hovering over the player's board. 
+3. The player can rotate the ship if he or she wants by clicking the rotate button. 
+4. The player can click to place the ship and once the ship has been placed you can no longer place another one of the same ship. 
+
+### Mouseover and Mouseoff 
+What was challenging was showing 
+
+## Gameplay 
+This aspect provide an additional challenge as I needed to combine allow the player to interact with the computer board and the AI to interact with the player's board. 
+
+### FIRE! 
+How are we 
+
+
+## Audio
+
+
 
 ### Built with
 * HTML 
@@ -103,11 +161,17 @@ This was the most challenging aspect of this project. How can the user place a s
 * Javascript
 
 
-### Credit to 
+### Credit To:
 * Bill Mei - https://github.com/billmei/battleboat
+    * Provided initial inspiration for the layout and for the code the place the AI ships on the board and to check whether or not the ships were within the grid. 
 * LearnTeachCode - https://github.com/LearnTeachCode/Battleship-JavaScript
+    * Provided the thought process and code for creating the gameboard. 
+    * Provided the inspiration for how to check whether a player has hit or missed a ship. 
 
-### Additional functionality and wish list
+### Additional Functionality and Wish List
 * Using ship images for the actual ships
-* Refining the AI so that it is not randomly shooting
+* Refine placement of player's ships such that it will not let you place a ship on top of your own ship. I assume the player understands the rules of the game but it would be helpful to prevent that from happening in case the player accidentally clicks on the wrong location. 
+* Refining the AI with some probability function or iterative function so that it is not randomly shooting but is able to use previous information to calculate the next move. 
 * Cleaning some of the CSS so that the layout does not need to use a fixed or absolute positioning system. 
+* Adding CSS animation ot the Start Screen and the display elements. 
+* Implement a tablet and mobile friendly version of the game. 
