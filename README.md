@@ -9,6 +9,7 @@ The classic game of Battleship pitting two opponents against one another which i
 
 
 Image of the original game
+![alt text](.img/originalbattleship.png "Original Battleship")
 
 
 
@@ -142,17 +143,25 @@ This process followed the below steps:
 4. The player can click to place the ship and once the ship has been placed you can no longer place another one of the same ship. 
 
 ### Mouseover and Mouseoff 
-What was challenging was showing 
+What was challenging was showing where the player was thinking about placing the ship. The mouseover and mouseoff event listeners were used to display which cells the ship would be placed. Ultimately, this was done by choosing the cells and changing the class of the cells to incorporate CSS styling. 
+
+Screenshot
 
 ## Gameplay 
 This aspect provide an additional challenge as I needed to combine allow the player to interact with the computer board and the AI to interact with the player's board. 
 
 ### FIRE! 
-How are we 
+Once the ships have been placed and the player clicks on the "Commence Operation" button, then the player is able to being firing on the AI's board. So the player can click on an individual space and using the aiBoard array, the javascript will check whether there is a ship there to return a hit or miss as well as style the cell appropriately. 
+
+In this version, the AI will randomly select a cell on the player board and fire right after we have fired on them!
+
+There is a check built into the AI guess in order to make sure that the AI does not fire on the same location twice. 
 
 
 ## Audio
+This was an interesting feature of the game that I enjoyed learning about which was to incorporate audio files upon certain button clicks especially when the player gets a hit or a miss. 
 
+An interesting note regarding audio was that I found out that I needed to pause the audio and restart the audio clip before playing it. 
 
 
 ### Built with
@@ -170,6 +179,7 @@ How are we
 
 ### Additional Functionality and Wish List
 * Using ship images for the actual ships
+* Do not allow the player to fire on the same spot if he or she has already clicked on that spot. 
 * Refine placement of player's ships such that it will not let you place a ship on top of your own ship. I assume the player understands the rules of the game but it would be helpful to prevent that from happening in case the player accidentally clicks on the wrong location. 
 * Refining the AI with some probability function or iterative function so that it is not randomly shooting but is able to use previous information to calculate the next move. 
 * Cleaning some of the CSS so that the layout does not need to use a fixed or absolute positioning system. 
