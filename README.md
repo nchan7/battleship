@@ -1,7 +1,7 @@
 # Battle of the Ships
 ## Nathan Chan | June 14, 2019
 ### General Assembly - Software Engineering Immersive Project 1: HTML, CSS, Javascript
-#### A link to the game can be found here: 
+#### Check out the game here: https://nchan7.github.io/battleship/
 
 
 ## Introduction 
