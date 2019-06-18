@@ -22,6 +22,18 @@ main {
     text-shadow: 1.7px 1.7px 2px #000;
 }
 
+#playerside {
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+}
+
+#enemyside {
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+}
+/* 
 #player {
     position: absolute; 
     top: 275px;
@@ -38,7 +50,7 @@ main {
     right: 50px; 
     bottom: 300px;
     height: 30px;
-}
+} */
 
 .position2 {
     transform: translateY(20px);
@@ -71,7 +83,7 @@ h2 {
 }
 
 h3 {
-    margin: 20px auto 10px auto;
+    margin: 20px auto 0px auto;
     color:  rgb(245,245,245); 
     text-align: center;
     text-shadow: 2px 2px 2px #000;
@@ -95,10 +107,15 @@ section {
 }
 
 #ships {
-    display: inline-block;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    
+    
+    /* display: inline-block; */
     width: 125px;
-    margin: 0 auto;
-    text-align: center;
+    /* margin: 0 auto;
+    text-align: center; */
 }
 
 #rotate {
